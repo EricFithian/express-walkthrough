@@ -8,9 +8,23 @@ require('hbs')
 
 app.set('view engine', 'hbs')
 
+// The method `.use` sets up middleware for the Express application
+app.use(express.json())
+// this parses requests that may use a different content type
+app.use(express.urlencoded({ extended: true }))
+
+
 app.get('/', (req, res) => {
-    res.send(`<h1>Duke will beat Texas Tech on Thursday</h1>
-    <h2>More information</h2>`)
+    res.render("welcome")
+})
+
+app.post('/', (req, res) => {
+    console.log(req.body)
+    let context = {
+        name: req.body.name,
+        email: req.body.email
+    }
+    res.render('profile', context)
 })
 
 app.get('/:myName', (req, res) => {
@@ -24,6 +38,7 @@ app.get('/taco_tuesday/:number', (req, res) => {
     let context = { numOfTacos: req.params.number}
     res.render(`tacos`, context)
 })
+
 
 app.listen(4000, () => {
     console.log("app listening on port 4000")
